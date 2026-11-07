@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import { Camera, Upload } from "lucide-react";
 import { useState, useRef } from "react";
 
+const DEFAULT_PHOTO = import.meta.env.VITE_PROFILE_PHOTO_URL || "";
+
 const PhotoUpload = () => {
-  const [photo, setPhoto] = useState<string | null>(null);
+  const [photo, setPhoto] = useState<string | null>(DEFAULT_PHOTO || null);
   const [isHovering, setIsHovering] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -19,7 +21,10 @@ const PhotoUpload = () => {
   };
 
   const handleClick = () => {
-    fileInputRef.current?.click();
+    // Only trigger file picker in local dev or if no photo is configured yet
+    if (!DEFAULT_PHOTO || import.meta.env.DEV) {
+      fileInputRef.current?.click();
+    }
   };
 
   return (
@@ -34,7 +39,9 @@ const PhotoUpload = () => {
       <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-primary/30 rounded-full blur-xl animate-float-delayed" />
 
       <motion.div
-        className="relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden cursor-pointer glass-card glow-effect"
+        className={`relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden glass-card glow-effect ${
+          !DEFAULT_PHOTO || import.meta.env.DEV ? "cursor-pointer" : ""
+        }`}
         onClick={handleClick}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
@@ -51,18 +58,20 @@ const PhotoUpload = () => {
           <>
             <img
               src={photo}
-              alt="Profile"
-              className="w-full h-full object-cover"
+              alt="Mohita S K"
+              className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
             />
-            <motion.div
-              className="absolute inset-0 bg-background/80 flex flex-col items-center justify-center gap-3"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isHovering ? 1 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Camera size={32} className="text-primary" />
-              <span className="text-sm font-medium">Change Photo</span>
-            </motion.div>
+            {import.meta.env.DEV && (
+              <motion.div
+                className="absolute inset-0 bg-background/80 flex flex-col items-center justify-center gap-3"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isHovering ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Camera size={32} className="text-primary" />
+                <span className="text-sm font-medium">Change Photo (Dev Only)</span>
+              </motion.div>
+            )}
           </>
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-8">
@@ -73,9 +82,9 @@ const PhotoUpload = () => {
               <Upload size={48} className="text-primary" />
             </motion.div>
             <div className="text-center">
-              <p className="font-medium mb-1">Upload Your Photo</p>
+              <p className="font-medium mb-1">Mohita S K</p>
               <p className="text-sm text-muted-foreground">
-                Click to browse
+                Profile Photo
               </p>
             </div>
           </div>

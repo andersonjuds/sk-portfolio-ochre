@@ -1,4 +1,19 @@
-# Logs
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Private local images/media
+Mohita SK image.jpeg
+public/profile-private.*
+*.jpeg
+*.jpg
+*.png
+!public/*.svg
+!public/*.ico
+!public/*.png
+!public/*.jpg
+!src/assets/*
 logs
 *.log
 npm-debug.log*
