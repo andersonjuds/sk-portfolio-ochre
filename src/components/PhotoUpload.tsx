@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { Camera, Upload } from "lucide-react";
 import { useState, useRef } from "react";
+import { profileImageBase64 } from "@/lib/profileImage";
 
-const DEFAULT_PHOTO = import.meta.env.VITE_PROFILE_PHOTO_URL || "";
+const DEFAULT_PHOTO = import.meta.env.VITE_PROFILE_PHOTO_URL || profileImageBase64;
 
 const PhotoUpload = () => {
   const [photo, setPhoto] = useState<string | null>(DEFAULT_PHOTO || null);
